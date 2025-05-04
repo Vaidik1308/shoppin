@@ -1,26 +1,53 @@
 import React from 'react';
-import logo from './logo.svg';
+import ProductSwiper from './components/ProductSwiper';
+import { AppProvider, useApp } from './context/AppContext';
 import './App.css';
 
-function App() {
+const Header: React.FC = () => {
+  const { resetApp } = useApp();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <header className="bg-white shadow-sm">
+      <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+        <h1 className="text-2xl font-bold text-gray-900">Product Discovery</h1>
+        <button
+          onClick={resetApp}
+          className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+          title="Reload"
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6 text-gray-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+            />
+          </svg>
+        </button>
+      </div>
+    </header>
   );
-}
+};
+
+const App: React.FC = () => {
+  return (
+    <AppProvider>
+      <div className="max-h-screen bg-gray-100 overflow-y-hidden">
+        <Header />
+        <main className="max-w-7xl mx-auto py-0.5 sm:px-4  px-0 lg:px-8">
+          <div className="px-1  sm:px-0">
+            <ProductSwiper />
+          </div>
+        </main>
+      </div>
+    </AppProvider>
+  );
+};
 
 export default App;
