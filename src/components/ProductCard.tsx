@@ -267,7 +267,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onSwipe, isActive })
       )}
       <div
         ref={cardRef}
-        className="relative w-full h-full bg-white rounded-xl shadow-lg overflow-hidden"
+        className=" relative w-full h-full bg-white rounded-xl shadow-lg overflow-hidden"
         style={{
           transform,
           cursor: isDragging ? 'grabbing' : 'grab',
@@ -285,9 +285,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onSwipe, isActive })
               alt={product.name}
               className="w-full h-full object-cover"
             />
-            <div className="absolute top-4 right-4 bg-white rounded-full p-2 shadow-md">
-              
-            </div>
+            {/* <div className="absolute top-4 right-4 bg-white rounded-full p-2 shadow-md">
+              <Fa
+            </div> */}
             {product.discountPercentage && product.discountPercentage > 0 && <div className="text-sm font-medium bg-green-500 text-white shadow-lg size-10 rounded-full flex items-center justify-center absolute top-4 left-4">
               {product.discountPercentage}% 
             </div>}
