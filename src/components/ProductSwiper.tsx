@@ -70,7 +70,7 @@ const ProductSwiper: React.FC = () => {
           <h1 className="text-xl font-bold text-gray-800">Product Discovery</h1>
         </div>
       </header> */}
-      <div className="max-w-4xl mx-auto py-8 p-4">
+      <div className="max-w-4xl mx-auto py-8 p-2">
         <div className="relative w-full max-w-sm mx-auto h-[80vh]">
           {visibleProducts.map((product, index) => (
             <div
@@ -78,8 +78,9 @@ const ProductSwiper: React.FC = () => {
               className="absolute w-full h-full"
               style={{
                 zIndex: 3 - index,
-                transform: `scale(${1 - index * 0.05})`,
-                top: `${index * 10}px`
+                transform: `scale(${1 - index * 0.08})`,
+                transition:"transform 0.2s ease-in-out",
+                top: `${index * 2}px`
               }}
             >
               <ProductCard

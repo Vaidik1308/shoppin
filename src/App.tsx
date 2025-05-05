@@ -38,10 +38,10 @@ const Header: React.FC = () => {
 const App: React.FC = () => {
   return (
     <AppProvider>
-      <div className="max-h-screen bg-gray-100 overflow-y-hidden">
+      <div style={{paddingTop:"env(safe-area-inset-top)"}} className="max-h-screen bg-gray-100 overflow-y-hidden">
         <Header />
-        <main className="max-w-7xl mx-auto py-0.5 sm:px-4  px-0 lg:px-8">
-          <div className="px-1  sm:px-0">
+        <main className="max-w-7xl mx-auto py-0.5 sm:px-2  px-0 lg:px-8">
+          <div className="px-0.5  sm:px-0">
             <ProductSwiper />
           </div>
         </main>
