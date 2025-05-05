@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Product } from '../data/products';
 import { motion } from 'framer-motion';
+import { ShoppingCartIcon, ThumbsDownIcon, ThumbsUpIcon } from 'lucide-react';
 // import { FaRegHeart } from 'react-icons/fa';
 
 interface ProductCardProps {
@@ -21,7 +22,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onSwipe, isActive })
   const nameRef = useRef<HTMLDivElement>(null);
 
   const getSwipeIndicator = () => {
-    const threshold = 80;
+    const threshold = 30;
     if (Math.abs(position.x) > threshold) {
       return position.x > 0 ? 'Like' : 'Dislike';
     } else if (position.y < -threshold) {
@@ -123,166 +124,69 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onSwipe, isActive })
     <>
       {swipeIndicator && (
         <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          // exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
-          className="fixed bottom-[-0%] left-0 right-0 transform z-50"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{  scale: 0.8 }}
+          transition={{ 
+            type: "spring",
+            stiffness: 200,
+            damping: 10,
+            duration: 0.8
+          }}
+          className={`fixed  ${swipeIndicator === 'Like' ? "top-[2%] left-2" : swipeIndicator === 'Dislike' ? " top-[2%] right-0" : swipeIndicator === 'Save' ? "bottom-0 right-0 left-0" : "right-0"} transform z-[99]`}
         >
           <div className="flex justify-center items-center gap-2">
             {swipeIndicator === 'Like' && (
               <>
                 <motion.div
-                  initial={{ y: 80, opacity: 0, scale: 0.5 }}
+                  initial={{ y: 50, opacity: 0, scale: 0.8 }}
                   animate={{ y: 0, opacity: 1, scale: 1 }}
-                  exit={{ y: -80, scale: 0.8 }}
+                  exit={{ y: -550, opacity: 0, scale: 0.8 }}
                   transition={{ 
                     type: "spring",
-                    stiffness: 100,
-                    damping: 16,
-                    duration: 0.8
+                    stiffness: 300,
+                    damping: 20,
+                    duration: 0.3
                   }}
-                  className="bg-green-500 text-white rounded-full p-2 shadow-lg"
+                  className="flex flex-col items-center justify-center font-sans font-bold bg-green-500 text-white text-lg rounded-full p-3 shadow-lg size-20"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
-                  </svg>
-                </motion.div>
-                <motion.div
-                  initial={{ y: 120, opacity: 0, scale: 0.8 }}
-                  animate={{ y: 0, opacity: 1, scale: 1 }}
-                  exit={{ y: -120, opacity: 0, scale: 0.8 }}
-                  transition={{ 
-                    type: "spring",
-                    stiffness: 200,
-                    damping: 16,
-                    duration: 0.8
-                  }}
-                  className="bg-green-500 text-white rounded-full p-3 shadow-lg"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
-                  </svg>
-                </motion.div>
-                <motion.div
-                  initial={{ y: 80, opacity: 0, scale: 0.8 }}
-                  animate={{ y: 0, opacity: 1, scale: 1 }}
-                  exit={{ y: -400, opacity: 0, scale: 0.8 }}
-                  transition={{ 
-                    type: "spring",
-                    stiffness: 200,
-                    damping: 16,
-                    duration: 0.8
-                  }}
-                  className="bg-green-500 text-white rounded-full p-2 shadow-lg"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
-                  </svg>
+                <ThumbsUpIcon className='size-10'/>
                 </motion.div>
               </>
             )}
             {swipeIndicator === 'Dislike' && (
               <>
                 <motion.div
-                  initial={{ y: 80, opacity: 0, scale: 0.8 }}
+                  initial={{ y: 50, opacity: 0, scale: 0.8 }}
                   animate={{ y: 0, opacity: 1, scale: 1 }}
-                  exit={{ y: -80, opacity: 0, scale: 0.8 }}
+                  exit={{ y: -50, opacity: 0, scale: 0.8 }}
                   transition={{ 
                     type: "spring",
-                    stiffness: 100,
-                    damping: 16,
-                    duration: 0.8
+                    stiffness: 300,
+                    damping: 20,
+                    duration: 0.3
                   }}
-                  className="bg-red-500 text-white rounded-full p-2 shadow-lg"
+                  className="flex flex-col items-center justify-center font-sans font-bold bg-red-500 text-white text-lg rounded-full p-3 shadow-lg size-20"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                  </svg>
-                </motion.div>
-                <motion.div
-                  initial={{ y: 120, opacity: 0, scale: 0.8 }}
-                  animate={{ y: 0, opacity: 1, scale: 1 }}
-                  exit={{ y: -120, opacity: 0, scale: 0.8 }}
-                  transition={{ 
-                    type: "spring",
-                    stiffness: 200,
-                    damping: 16,
-                    duration: 0.8
-                  }}
-                  className="bg-red-500 text-white rounded-full p-3 shadow-lg"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                  </svg>
-                </motion.div>
-                <motion.div
-                  initial={{ y: 80, opacity: 0, scale: 0.8 }}
-                  animate={{ y: 0, opacity: 1, scale: 1 }}
-                  exit={{ y: -80, opacity: 0, scale: 0.8 }}
-                  transition={{ 
-                    type: "spring",
-                    stiffness: 200,
-                    damping: 16,
-                    duration: 0.8
-                  }}
-                  className="bg-red-500 text-white rounded-full p-2 shadow-lg"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                  </svg>
+                  <ThumbsDownIcon className='size-10'/>
                 </motion.div>
               </>
             )}
             {swipeIndicator === 'Save' && (
               <>
                 <motion.div
-                  initial={{ y: 80, opacity: 0, scale: 0.8 }}
+                  initial={{ y: 50, opacity: 0, scale: 0.8 }}
                   animate={{ y: 0, opacity: 1, scale: 1 }}
-                  exit={{ y: -80, opacity: 0, scale: 0.8 }}
+                  exit={{ y: -50, opacity: 0, scale: 0.8 }}
                   transition={{ 
                     type: "spring",
-                    stiffness: 100,
-                    damping: 16,
-                    duration: 0.8
+                    stiffness: 300,
+                    damping: 20,
+                    duration: 0.3
                   }}
-                  className="bg-blue-500 text-white rounded-full p-2 shadow-lg"
+                  className="flex flex-col items-center justify-center font-sans font-bold bg-blue-500 text-white text-lg rounded-full p-3 shadow-lg size-20"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h5a2 2 0 012 2v7a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h5v5.586l-1.293-1.293zM9 4a1 1 0 012 0v2H9V4z" />
-                  </svg>
-                </motion.div>
-                <motion.div
-                  initial={{ y: 120, opacity: 0, scale: 0.8 }}
-                  animate={{ y: 0, opacity: 1, scale: 1 }}
-                  exit={{ y: -120, opacity: 0, scale: 0.8 }}
-                  transition={{ 
-                    type: "spring",
-                    stiffness: 200,
-                    damping: 16,
-                    duration: 0.8
-                  }}
-                  className="bg-blue-500 text-white rounded-full p-3 shadow-lg"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h5a2 2 0 012 2v7a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h5v5.586l-1.293-1.293zM9 4a1 1 0 012 0v2H9V4z" />
-                  </svg>
-                </motion.div>
-                <motion.div
-                  initial={{ y: 80, opacity: 0, scale: 0.8 }}
-                  animate={{ y: 0, opacity: 1, scale: 1 }}
-                  exit={{ y: -80, opacity: 0, scale: 0.8 }}
-                  transition={{ 
-                    type: "spring",
-                    stiffness: 200,
-                    damping: 16,
-                    duration: 0.8
-                  }}
-                  className="bg-blue-500 text-white rounded-full p-2 shadow-lg"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h5a2 2 0 012 2v7a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h5v5.586l-1.293-1.293zM9 4a1 1 0 012 0v2H9V4z" />
-                  </svg>
+                  <ShoppingCartIcon className='size-10'/>
                 </motion.div>
               </>
             )}
@@ -303,6 +207,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onSwipe, isActive })
         onTouchStart={handleDragStart}
       >
         <div className="relative h-full flex flex-col">
+        
           <div className="relative flex-grow h-[90%]">
             <img
               src={product.image}
