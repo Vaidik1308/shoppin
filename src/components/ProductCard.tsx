@@ -14,6 +14,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onSwipe, isActive })
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
   const [showFullName, setShowFullName] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [velocity, setVelocity] = useState({ x: 0, y: 0 });
+  const lastPosition = useRef({ x: 0, y: 0 });
+  const lastTime = useRef(Date.now());
   const cardRef = useRef<HTMLDivElement>(null);
   const nameRef = useRef<HTMLDivElement>(null);
 
@@ -36,6 +39,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onSwipe, isActive })
       setStartPos({ x: e.clientX, y: e.clientY });
     }
     setIsDragging(true);
+    lastPosition.current = { x: 0, y: 0 };
+    lastTime.current = Date.now();
   };
 
   const handleDragMove = (e: MouseEvent | TouchEvent) => {
@@ -47,6 +52,22 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onSwipe, isActive })
     const newX = clientX - startPos.x;
     const newY = clientY - startPos.y;
     
+    const currentTime = Date.now();
+    const deltaTime = currentTime - lastTime.current;
+    
+    if (deltaTime > 0) {
+      const deltaX = newX - lastPosition.current.x;
+      const deltaY = newY - lastPosition.current.y;
+      
+      setVelocity({
+        x: deltaX / deltaTime,
+        y: deltaY / deltaTime
+      });
+    }
+    
+    lastPosition.current = { x: newX, y: newY };
+    lastTime.current = currentTime;
+    
     setPosition({
       x: newX,
       y: newY
@@ -57,14 +78,17 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onSwipe, isActive })
     if (!isDragging) return;
     setIsDragging(false);
 
-    const threshold = 80;
+    const threshold = 50;
+    const speed = Math.sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
+    const animationDuration = Math.max(0.2, Math.min(0.5, 1 / (speed * 10))); // Clamp between 0.2s and 0.5s
+
     if (Math.abs(position.x) > threshold) {
       const direction = position.x > 0 ? 'right' : 'left';
       setPosition({ x: position.x > 0 ? 800 : -800, y: 0 });
-      setTimeout(() => onSwipe(direction), 500);
+      setTimeout(() => onSwipe(direction), animationDuration * 1000);
     } else if (position.y < -threshold) {
       setPosition({ x: 0, y: -800 });
-      setTimeout(() => onSwipe('up'), 500);
+      setTimeout(() => onSwipe('up'), animationDuration * 1000);
     } else {
       setPosition({ x: 0, y: 0 });
     }
@@ -91,8 +115,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onSwipe, isActive })
     };
   }, [isDragging, position, startPos]);
 
-  const rotate = position.x * 0.08;
-  const transform = `translate(${position.x}px, ${position.y}px) rotate(${rotate}deg)`;
+  const rotate = position.x * 0.1;
+  const transform = `translate(${position.x}px, ${position.y}px) rotateX(${rotate}deg)`;
   const swipeIndicator = getSwipeIndicator();
 
   return (
@@ -273,7 +297,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onSwipe, isActive })
           cursor: isDragging ? 'grabbing' : 'grab',
           touchAction: 'none',
           userSelect: 'none',
-          transition: isDragging ? 'none' : 'transform 0.5s ease-in-out'
+          transition: isDragging ? 'none' : `transform ${Math.max(0.2, Math.min(0.5, 1 / (Math.sqrt(velocity.x * velocity.x + velocity.y * velocity.y) * 10)))}s ease-out`
         }}
         onMouseDown={handleDragStart}
         onTouchStart={handleDragStart}
