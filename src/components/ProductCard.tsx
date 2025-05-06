@@ -53,25 +53,25 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onSwipe }) => {
     const newX = clientX - startPos.x;
     const newY = clientY - startPos.y;
     
-    const currentTime = Date.now();
-    const deltaTime = currentTime - lastTime.current;
+    const currentTime = Date.now(); //get current time
+    const deltaTime = currentTime - lastTime.current; //calculate deltaTime
     
     if (deltaTime > 0) {
-      const deltaX = newX - lastPosition.current.x;
-      const deltaY = newY - lastPosition.current.y;
+      const deltaX = newX - lastPosition.current.x; //calculate deltaX
+      const deltaY = newY - lastPosition.current.y; //calculate deltaY
       
       setVelocity({
-        x: deltaX / deltaTime,
-        y: deltaY / deltaTime
+        x: deltaX / deltaTime, //calculate velocity in x direction
+        y: deltaY / deltaTime //calculate velocity in y direction
       });
     }
     
-    lastPosition.current = { x: newX, y: newY };
-    lastTime.current = currentTime;
+    lastPosition.current = { x: newX, y: newY }; //update last position
+    lastTime.current = currentTime; //update last time
     
     setPosition({
-      x: newX,
-      y: newY
+      x: newX, //update position
+      y: newY //update position
     });
   };
 
@@ -79,20 +79,20 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onSwipe }) => {
     if (!isDragging) return;
     setIsDragging(false);
 
-    const threshold = 50;
-    const speed = Math.sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
+    const threshold = 50; //threshold for swipe
+    const speed = Math.sqrt(velocity.x * velocity.x + velocity.y * velocity.y); //calculate speed     
     const animationDuration = Math.max(0.2, Math.min(0.5, 1 / (speed * 10))); // Clamp between 0.2s and 0.5s
     // console.log(animationDuration);
 
     if (Math.abs(position.x) > threshold) {
-      const direction = position.x > 0 ? 'right' : 'left';
-      setPosition({ x: position.x > 0 ? 800 : -800, y: 0 });
-      setTimeout(() => onSwipe(direction), animationDuration * 1000);
+      const direction = position.x > 0 ? 'right' : 'left'; //calculate direction
+      setPosition({ x: position.x > 0 ? 800 : -800, y: 0 }); //set position
+      setTimeout(() => onSwipe(direction), animationDuration * 1000); //set timeout
     } else if (position.y < -threshold) {
-      setPosition({ x: 0, y: -800 });
-      setTimeout(() => onSwipe('up'), animationDuration * 1000);
+      setPosition({ x: 0, y: -800 }); //set position  
+      setTimeout(() => onSwipe('up'), animationDuration * 1000); //set timeout
     } else {
-      setPosition({ x: 0, y: 0 });
+      setPosition({ x: 0, y: 0 }); //set position
     }
   };
 
@@ -103,13 +103,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onSwipe }) => {
 
   useEffect(() => {
     if (isDragging) {
-      window.addEventListener('mousemove', handleDragMove);
+      window.addEventListener('mousemove', handleDragMove); //add event listeners for mouse events
       window.addEventListener('mouseup', handleDragEnd);
-      window.addEventListener('touchmove', handleDragMove, { passive: true });
+      window.addEventListener('touchmove', handleDragMove, { passive: true }); //add event listeners for touch events
+      //passive: true - indicates that the event listener will not prevent the default action
       window.addEventListener('touchend', handleDragEnd);
     }
 
     return () => {
+      //remove event listeners when component unmounts
       window.removeEventListener('mousemove', handleDragMove);
       window.removeEventListener('mouseup', handleDragEnd);
       window.removeEventListener('touchmove', handleDragMove);
@@ -205,7 +207,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onSwipe }) => {
           transition: isDragging ? 'none' : `transform ${Math.max(0.2, Math.min(0.5, 1 / (Math.sqrt(velocity.x * velocity.x + velocity.y * velocity.y) * 10)))}s ease-out`
         }}
         onMouseDown={handleDragStart}
-        onTouchStart={handleDragStart}
+        onTouchStart={handleDragStart} 
       >
         <div className="relative h-full flex flex-col">
         
