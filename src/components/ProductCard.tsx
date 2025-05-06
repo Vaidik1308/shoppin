@@ -7,10 +7,10 @@ import { ShoppingCartIcon, ThumbsDownIcon, ThumbsUpIcon } from 'lucide-react';
 interface ProductCardProps {
   product: Product;
   onSwipe: (direction: 'left' | 'right' | 'up') => void;
-  isActive: boolean;
+  // isActive: boolean;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, onSwipe, isActive }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, onSwipe }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
   const [showFullName, setShowFullName] = useState(false);
@@ -82,6 +82,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onSwipe, isActive })
     const threshold = 50;
     const speed = Math.sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
     const animationDuration = Math.max(0.2, Math.min(0.5, 1 / (speed * 10))); // Clamp between 0.2s and 0.5s
+    // console.log(animationDuration);
 
     if (Math.abs(position.x) > threshold) {
       const direction = position.x > 0 ? 'right' : 'left';

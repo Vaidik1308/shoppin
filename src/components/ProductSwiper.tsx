@@ -65,11 +65,6 @@ const ProductSwiper: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 overflow-y-auto">
-      {/* <header className="bg-white shadow-sm p-4 sticky top-0 z-50">
-        <div className="max-w-4xl mx-auto flex justify-between items-center">
-          <h1 className="text-xl font-bold text-gray-800">Product Discovery</h1>
-        </div>
-      </header> */}
       <div className="max-w-4xl mx-auto py-8 p-2">
         <div className="relative w-full max-w-sm mx-auto h-[80vh]">
           {visibleProducts.map((product, index) => (
@@ -86,7 +81,7 @@ const ProductSwiper: React.FC = () => {
               <ProductCard
                 product={product}
                 onSwipe={index === 0 ? handleSwipe : () => {}}
-                isActive={index === 0}
+                // isActive={index === 0}
               />
             </div>
           ))}
